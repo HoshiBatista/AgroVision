@@ -1,82 +1,122 @@
-# ADR 0002: product scope — aerial sheep detection and counting web product
+# ADR 0002: Aerial sheep detection and counting product
 
-- Status: accepted
-- Date: 2026-09-12
-- Supersedes discovery in `docs/PROJECT_IDEAS.md` (topic selection is now fixed)
+| Field | Value |
+|---|---|
+| Status | Accepted with implementation notes |
+| Date | 2026-09-12 |
+| Owners | AgroVision team |
+| Decision area | Product scope and application architecture |
+| Supersedes | [`docs/PROJECT_IDEAS.md`](../PROJECT_IDEAS.md) as active direction |
 
 ## Context
 
-`docs/PROJECT_IDEAS.md` enumerated several candidate two-model concepts and was
-explicitly a discovery document. A product topic must be selected and captured
-here before building the application layer, per `CLAUDE.md`.
+The discovery phase compared several agribusiness concepts, including two-model
+cascades. A hackathon implementation needed one coherent user, one operational
+decision, an end-to-end path from data to application, and a reliable offline
+demo.
 
-The team selected the aerial-sheep direction that already has a trained baseline
-(`docs/adr/0001-aerial-sheep-baseline.md`): detect and count sheep in aerial
-drone imagery with YOLO26n. The product is an operational monitoring tool for a
-livestock operator, not a meat-quality pipeline.
+The aerial-sheep baseline in [ADR 0001](0001-aerial-sheep-baseline.md) was already
+measured and could support a narrower, more credible workflow than starting two
+unrelated models.
 
 ## Decision
 
-Build **AgroVision**, an end-to-end web product for aerial sheep monitoring.
+Build **AgroVision**, a locally controlled product for detecting and counting
+sheep in aerial images and video.
 
-### Primary user and decision
-A **livestock operator / farm monitor** who needs to know *how many sheep are
-present* across drone footage and still imagery, watch multiple drone feeds at
-once, and export a defensible count report. The core decision the product
-supports: "is the counted flock size on this feed within expectation, and which
-feed needs a human to look now?"
+### Primary user
 
-### Model roles
-This product ships a **single detection model** (YOLO26n, one class `sheep`) used
-in three surfaces that share one application use case:
-1. single-image detection and count;
-2. uploaded-video detection with a per-frame count time series;
-3. simulated live drone streams feeding an aggregate dashboard.
+The primary user is a livestock operator or farm monitor who needs to answer:
 
-The two-model cascade described for other concepts in `PROJECT_IDEAS.md` is **out
-of scope** for this product. If a second model is added later (e.g. flock
-health/behavior on detected crops), it will be recorded in a new ADR. The
-`AGENTS.md` two-model guidance is a default, not a hard requirement, and is
-consciously narrowed here in favor of one workflow that works reliably.
+> Is the visible flock size within expectation, and which source needs human
+> review now?
 
-### Deviations from `AGENTS.md` defaults
-Both are intentional and scoped:
+### Model scope
 
-1. **UI stack: React (Vite) + TypeScript + Tailwind instead of Streamlit.**
-   The product requires a polished marketing landing page (animated clouds and
-   sheep), a real authentication flow, a multi-tile live-stream dashboard, and
-   MJPEG video tiles. Streamlit cannot deliver this presentation quality or the
-   streaming layout. The web app still calls the exact same versioned API /
-   application use cases as any other client, preserving the `AGENTS.md`
-   contract that UI and API share one path.
+Ship one YOLO26n detector with one class, `sheep`. The same application-level
+inference path supports:
 
-2. **Primary database: PostgreSQL instead of SQLite.**
-   Full JWT auth (registration, login, refresh, roles) and a session journal are
-   in scope. Postgres runs locally via `docker-compose` and needs no paid cloud
-   service, so the offline-after-setup requirement still holds. Persistence stays
-   behind a repository port, so SQLite remains a possible swap without touching
-   domain logic.
+1. uploaded-image detection and counting;
+2. uploaded-video analysis with a count time series;
+3. file-backed drone streams on an aggregate dashboard;
+4. dynamically connected RTSP streams.
 
-## Scope
+A second model is not decorative scope. It may be added only if it consumes the
+detector output or completes a measured lifecycle decision, and it requires a
+new ADR plus end-to-end evaluation.
 
-In scope (MVP, all required for the defense):
-- landing page, JWT registration/login;
-- single-photo inference with annotated result and count;
-- single-video inference with annotated output and count time series;
-- simulated live drone streams (from files) with an aggregate dashboard
-  (per-stream counts, trends, latency);
-- CSV/PDF report export and a session journal.
+### Product outcome
 
-Out of scope for MVP: a second cascade model; real RTSP/RTMP ingestion (the
-stream source is abstracted so it can be added later); multi-tenant org
-management; mobile apps.
+Each inference surface must provide more than bounding boxes:
 
-## Limitations to surface in the UI
+- a confident count and visible uncertain detections;
+- model version, threshold, limitations, and processing time;
+- an annotated result suitable for review;
+- a session record and exportable report when the user is authenticated;
+- one versioned API contract shared by the web application.
 
-- Counts are a **visual estimate**. Occlusion, flock density, flight altitude,
-  motion blur, and small object size cause miss/double counts. The UI must show
-  the model version and mark low-confidence detections as uncertain.
-- The baseline split has documented temporal leakage (see ADR 0001), so reported
-  validation/test metrics are optimistic until the split is rebuilt by
-  source video/flight. `GET /v1/model-info` and the evaluation report must carry
-  this caveat.
+## Architecture choices
+
+### React instead of Streamlit
+
+Use React, TypeScript, Vite, and Tailwind for the web client. The product requires
+a polished landing page, authentication, multiple live tiles, MJPEG playback,
+responsive controls, and a dashboard that would be awkward to express in the
+default Streamlit stack.
+
+The React client remains a thin API consumer. Business rules stay in domain and
+application layers.
+
+### Dual local database modes
+
+Keep persistence behind repository ports. SQLite is the zero-service default for
+local setup and offline demonstration. PostgreSQL is the containerized integration
+and deployment profile used for real repository tests, concurrent sessions, and
+the full Docker stack.
+
+## Delivered scope
+
+| Capability | Initial MVP decision | Current implementation |
+|---|---|---|
+| Landing page and Russian UI | In scope | Delivered |
+| JWT registration and login | In scope | Delivered |
+| Image inference | In scope | Delivered |
+| Video inference and time series | In scope | Delivered |
+| File-backed drone dashboard | In scope | Delivered |
+| Session journal and CSV/PDF export | In scope | Delivered |
+| RTSP ingestion | Initially deferred | Delivered through `StreamSourcePort` |
+| Multi-tenant organization management | Out of scope | Not implemented |
+| Native mobile applications | Out of scope | Not implemented |
+| Second model | Out of scope | Not implemented |
+
+## Implementation notes
+
+RTSP support was added after the initial MVP scope without changing domain rules:
+the existing stream port gained a concrete RTSP adapter, reconnect behavior, and
+server-side URI handling. SQLite became the default local mode while PostgreSQL
+remained the full integration and Docker mode. These are implementation refinements
+within the accepted modular-monolith boundary.
+
+## Consequences
+
+- One model can be versioned, evaluated, and rolled back independently.
+- Every user-facing inference path shares the same model metadata and threshold.
+- The demo works locally without a paid inference service.
+- React adds a separate Node.js toolchain, lockfile, and CI job.
+- Two database modes require contract tests and real PostgreSQL integration tests.
+
+## Product limitations
+
+- Counts are visual estimates, not inventory guarantees.
+- Occlusion, density, altitude, blur, shadows, and small objects affect accuracy.
+- Low-confidence detections must remain visible as uncertain outcomes.
+- Baseline metrics are optimistic because of the temporal split leakage described
+  in ADR 0001.
+- The product has not yet been validated as a production livestock system.
+
+## Related documents
+
+- [ADR 0001: Dataset and baseline](0001-aerial-sheep-baseline.md)
+- [ADR 0003: Runtime and containers](0003-model-runtime-and-containers.md)
+- [Archived discovery](../PROJECT_IDEAS.md)
+- [Main README](../../README.md)

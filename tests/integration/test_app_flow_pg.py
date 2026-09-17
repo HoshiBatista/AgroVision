@@ -58,14 +58,15 @@ def test_full_authenticated_flow_persists_to_postgres(client: TestClient) -> Non
         "/v1/predictions", headers=auth, files={"file": ("frame.jpg", _jpeg(), "image/jpeg")}
     )
     assert prediction.status_code == 200
-    assert prediction.json()["count"] == 2  # FakeDetector emits two detections
+    assert prediction.json()["count"] == 1
+    assert prediction.json()["uncertain_count"] == 1
 
     sessions = client.get("/v1/reports/sessions", headers=auth)
     assert sessions.status_code == 200
     body = sessions.json()
     assert len(body) == 1
     assert body[0]["kind"] == "image"
-    assert body[0]["sheep_count"] == 2
+    assert body[0]["sheep_count"] == 1
 
     csv_export = client.get("/v1/reports/export.csv", headers=auth)
     assert csv_export.status_code == 200

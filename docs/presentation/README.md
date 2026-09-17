@@ -1,25 +1,67 @@
 # Презентация AgroVision
 
-- `AgroVision_pitch_deck.pptx` — редактируемая презентация 16:9, 15 слайдов со
-  встроенным H.264-видео лучшего облёта (пик около 1.2 секунды).
-- `speaker_notes.md` — готовый сценарий защиты и ответы на вопросы.
-- `assets/screenshots/` — реальные скриншоты локального приложения.
-- `assets/generated/` — производные изображения, создаваемые генератором.
+[К документации](../README.md) · [Основной README](../../README_RUS.md) ·
+[Сценарий защиты](speaker_notes.md)
 
-Пересборка:
+## Состав
+
+| Материал | Назначение |
+|---|---|
+| [`AgroVision_pitch_deck.pptx`](AgroVision_pitch_deck.pptx) | Редактируемая презентация 16:9, 15 слайдов, встроенное H.264-видео |
+| [`AgroVision_pitch_deck.pdf`](AgroVision_pitch_deck.pdf) | Версия для просмотра и резервной демонстрации без видео |
+| [`speaker_notes.md`](speaker_notes.md) | Сценарий выступления, live demo и ответы жюри |
+| [`assets/screenshots/`](assets/screenshots/) | Реальные скриншоты локального приложения |
+| [`assets/generated/`](assets/generated/) | Производные кадры, создаваемые генератором презентации |
+
+Встроенный ролик показывает фактический вывод выбранной модели на широком
+дрон-видео. Он длится около 6,7 секунды; пик счёта расположен примерно на отметке
+1,2 секунды.
+
+## Пересборка PPTX
+
+Перед сборкой должны существовать локальные model-output артефакты, перечисленные
+в `scripts/build_presentation.py`. Они намеренно не хранятся в Git как обычные
+runtime-результаты.
 
 ```bash
-PYTHONPATH=src:. .venv/bin/python -m scripts.build_presentation
+uv sync --all-groups
+PYTHONPATH=src:. uv run python -m scripts.build_presentation
 ```
 
-Скриншоты обновляются отдельной командой. Учётные данные передаются только через
-переменные окружения и не сохраняются в скрипте:
+Команда обновляет `AgroVision_pitch_deck.pptx`. PDF экспортируется из PowerPoint
+или совместимого офисного приложения после визуальной проверки слайдов.
+
+## Обновление скриншотов
+
+Сначала запустите API и web-приложение, затем передайте временные учётные данные
+только через окружение:
 
 ```bash
-AGROVISION_SCREENSHOT_EMAIL='…' \
-AGROVISION_SCREENSHOT_PASSWORD='…' \
-PYTHONPATH=src:. .venv/bin/python -m scripts.capture_presentation_screenshots
+AGROVISION_SCREENSHOT_EMAIL='local-demo-user' \
+AGROVISION_SCREENSHOT_PASSWORD='local-demo-password' \
+PYTHONPATH=src:. uv run python -m scripts.capture_presentation_screenshots
 ```
 
-Презентация не содержит значений `.env`, RTSP URI, паролей, JWT или полного API-ключа
-Roboflow. Метрики и SHA модели берутся из проверяемых артефактов проекта.
+Значения переменных не записываются в скрипт или презентацию. Не используйте в
+этой команде реальные production-учётные данные.
+
+## Проверка перед защитой
+
+- Открыть PPTX и убедиться, что встроенное видео воспроизводится локально.
+- Проверить PDF как резервный вариант без мультимедиа.
+- Сверить метрики и SHA-256 с
+  [`configs/model_yolo26n_aerial_sheep_v1.toml`](../../configs/model_yolo26n_aerial_sheep_v1.toml).
+- Убедиться, что скриншоты соответствуют текущему UI и не содержат персональных
+  данных, токенов или приватных RTSP URI.
+- Пройти сценарий из [`speaker_notes.md`](speaker_notes.md) с таймером.
+- Подготовить локальный checkpoint и тестовый кадр на случай отсутствия сети.
+
+## Правила безопасности
+
+Презентация не должна содержать значения `.env`, пароли, JWT, приватные RTSP URI
+или полный API-ключ Roboflow. Метрики, версия модели и checksum берутся только из
+версионированного manifest или проверенного evaluation report.
+
+Известная утечка соседних кадров между splits всегда показывается рядом с
+метриками. Презентация описывает результат как визуальную оценку, а не как
+гарантированный инвентаризационный или ветеринарный вывод.

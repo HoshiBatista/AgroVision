@@ -9,6 +9,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi&logoColor=white)
 ![React](https://img.shields.io/badge/React-TypeScript-149ECA?logo=react&logoColor=white)
 ![YOLO26n](https://img.shields.io/badge/Model-YOLO26n-111827)
+![License: MIT](https://img.shields.io/badge/License-MIT-F2C811)
 
 [English version](README.md) | **Русская версия**
 
@@ -330,8 +331,15 @@ TypeScript и production-сборку. Workflow имеет только read-д�
 
 ## Документация проекта
 
+- [Навигация по документации](docs/README.md)
 - [Решение по продукту и архитектуре](docs/adr/0002-product-scope.md)
 - [Решение по датасету и baseline](docs/adr/0001-aerial-sheep-baseline.md)
 - [Решение по runtime и контейнерам](docs/adr/0003-model-runtime-and-containers.md)
 - [Презентация](docs/presentation/AgroVision_pitch_deck.pdf)
 - [Сценарий выступления](docs/presentation/speaker_notes.md)
+
+## Лицензия
+
+Оригинальный код и документация АгроВижн распространяются по
+[лицензии MIT](LICENSE). Сторонние датасеты, зависимости, предобученные веса и
+медиафайлы сохраняют собственные лицензии и условия использования.

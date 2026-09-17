@@ -1,14 +1,19 @@
-# Claude Instructions
+# Claude instructions
 
-Read and follow `AGENTS.md` in full before making changes. It is the canonical
-source for product scope, architecture, ML reproducibility, security, testing,
-and definition of done.
+Read and follow [`AGENTS.md`](AGENTS.md) in full before making changes. It is the
+canonical source for the working agreement, architecture, ML reproducibility,
+security, verification, and definition of done.
 
-Also read `docs/PROJECT_IDEAS.md` while the product is still in discovery. Do not
-infer that a topic has been selected merely because it is ranked first. Once a
-topic is explicitly selected, capture it in `docs/adr/0001-product-scope.md` and
-use that ADR as the source of truth.
+The selected product is AgroVision. Use the accepted architecture decisions as
+the source of truth:
 
-Do not duplicate or weaken `AGENTS.md` here. If instructions conflict, follow the
-user's current request first, then `AGENTS.md`, then this file.
+- [`ADR 0001`](docs/adr/0001-aerial-sheep-baseline.md) for the dataset and model
+  baseline;
+- [`ADR 0002`](docs/adr/0002-product-scope.md) for product scope;
+- [`ADR 0003`](docs/adr/0003-model-runtime-and-containers.md) for inference and
+  deployment decisions.
 
+[`docs/PROJECT_IDEAS.md`](docs/PROJECT_IDEAS.md) is superseded discovery context,
+not active product direction. Do not duplicate or weaken `AGENTS.md` here. If
+instructions conflict, follow the user's current request, then `AGENTS.md`, then
+this file.

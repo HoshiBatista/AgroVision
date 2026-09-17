@@ -9,6 +9,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi&logoColor=white)
 ![React](https://img.shields.io/badge/React-TypeScript-149ECA?logo=react&logoColor=white)
 ![YOLO26n](https://img.shields.io/badge/Model-YOLO26n-111827)
+![License: MIT](https://img.shields.io/badge/License-MIT-F2C811)
 
 **English** | [Русская версия](README_RUS.md)
 
@@ -327,8 +328,15 @@ runs on the same branch are cancelled.
 
 ## Project documentation
 
+- [Documentation index](docs/README.md)
 - [Product scope and architecture decision](docs/adr/0002-product-scope.md)
 - [Dataset and baseline decision](docs/adr/0001-aerial-sheep-baseline.md)
 - [Runtime and container decision](docs/adr/0003-model-runtime-and-containers.md)
 - [Pitch deck](docs/presentation/AgroVision_pitch_deck.pdf)
 - [Speaker notes](docs/presentation/speaker_notes.md)
+
+## License
+
+Original AgroVision code and documentation are released under the
+[MIT License](LICENSE). Third-party datasets, dependencies, pretrained
+checkpoints, and media remain subject to their respective licenses and terms.
