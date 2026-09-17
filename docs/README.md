@@ -4,16 +4,44 @@ This directory contains the decisions, evidence, and presentation material that
 support the product claims in the main [English](../README.md) and
 [Russian](../README_RUS.md) documentation.
 
-## Start here
+## Product and operation
+
+| Document | Purpose | Status |
+|---|---|---|
+| [Architecture overview](ARCHITECTURE.md) | System context, module boundaries, and runtime flows | Current |
+| [API reference](API.md) | HTTP/WebSocket contracts, authentication, limits, and errors | Current |
+| [Dataset card](DATASET_CARD.md) | Dataset provenance, composition, audit, and leakage | Current |
+| [Model card](MODEL_CARD.md) | Model identity, metrics, counting semantics, and limitations | Current |
+| [Operations runbook](OPERATIONS.md) | Startup, health checks, failures, recovery, and demo preflight | Current |
+| [Release checklist](RELEASE_CHECKLIST.md) | Release evidence, security, compatibility, and rollback gates | Current |
+| [Roadmap](ROADMAP.md) | Evidence-based priorities and release gates | Current |
+
+## Architecture decisions
 
 | Document | Purpose | Status |
 |---|---|---|
 | [ADR 0001](adr/0001-aerial-sheep-baseline.md) | Dataset, training baseline, and evaluation caveat | Accepted |
 | [ADR 0002](adr/0002-product-scope.md) | Product scope, user, workflow, and stack deviations | Accepted |
 | [ADR 0003](adr/0003-model-runtime-and-containers.md) | Model integrity, inference serialization, and deployment | Accepted |
+
+## Presentation and history
+
+| Document | Purpose | Status |
+|---|---|---|
 | [Presentation guide](presentation/README.md) | Pitch deck assets, regeneration, and safety rules | Current |
 | [Speaker notes](presentation/speaker_notes.md) | Seven-to-nine-minute defense and live-demo script | Current |
 | [Project ideas](PROJECT_IDEAS.md) | Archived topic discovery that preceded AgroVision | Superseded |
+
+## Repository governance
+
+- [Contributing guide](../CONTRIBUTING.md)
+- [Code of conduct](../CODE_OF_CONDUCT.md)
+- [Governance](../GOVERNANCE.md)
+- [Support guide](../SUPPORT.md)
+- [Security policy](../SECURITY.md)
+- [Changelog](../CHANGELOG.md)
+- [MIT License](../LICENSE)
+- [Agent working agreement](../AGENTS.md)
 
 ## Documentation principles
 

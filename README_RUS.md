@@ -332,11 +332,24 @@ TypeScript и production-сборку. Workflow имеет только read-д�
 ## Документация проекта
 
 - [Навигация по документации](docs/README.md)
+- [Обзор архитектуры](docs/ARCHITECTURE.md)
+- [Справочник API](docs/API.md)
+- [Карточка датасета](docs/DATASET_CARD.md)
+- [Карточка модели](docs/MODEL_CARD.md)
+- [Руководство по эксплуатации](docs/OPERATIONS.md)
+- [Чек-лист релиза](docs/RELEASE_CHECKLIST.md)
+- [План развития](docs/ROADMAP.md)
 - [Решение по продукту и архитектуре](docs/adr/0002-product-scope.md)
 - [Решение по датасету и baseline](docs/adr/0001-aerial-sheep-baseline.md)
 - [Решение по runtime и контейнерам](docs/adr/0003-model-runtime-and-containers.md)
 - [Презентация](docs/presentation/AgroVision_pitch_deck.pdf)
 - [Сценарий выступления](docs/presentation/speaker_notes.md)
+- [Правила участия](CONTRIBUTING.md)
+- [Кодекс поведения](CODE_OF_CONDUCT.md)
+- [Управление проектом](GOVERNANCE.md)
+- [Получение поддержки](SUPPORT.md)
+- [Политика безопасности](SECURITY.md)
+- [История изменений](CHANGELOG.md)
 
 ## Лицензия
 

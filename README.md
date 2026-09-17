@@ -329,11 +329,24 @@ runs on the same branch are cancelled.
 ## Project documentation
 
 - [Documentation index](docs/README.md)
+- [Architecture overview](docs/ARCHITECTURE.md)
+- [API reference](docs/API.md)
+- [Dataset card](docs/DATASET_CARD.md)
+- [Model card](docs/MODEL_CARD.md)
+- [Operations runbook](docs/OPERATIONS.md)
+- [Release checklist](docs/RELEASE_CHECKLIST.md)
+- [Roadmap](docs/ROADMAP.md)
 - [Product scope and architecture decision](docs/adr/0002-product-scope.md)
 - [Dataset and baseline decision](docs/adr/0001-aerial-sheep-baseline.md)
 - [Runtime and container decision](docs/adr/0003-model-runtime-and-containers.md)
 - [Pitch deck](docs/presentation/AgroVision_pitch_deck.pdf)
 - [Speaker notes](docs/presentation/speaker_notes.md)
+- [Contributing guide](CONTRIBUTING.md)
+- [Code of conduct](CODE_OF_CONDUCT.md)
+- [Governance](GOVERNANCE.md)
+- [Support guide](SUPPORT.md)
+- [Security policy](SECURITY.md)
+- [Changelog](CHANGELOG.md)
 
 ## License
 
