@@ -43,8 +43,8 @@ services:
       - ./artifacts/training/yolo26n-aerial-sheep-v1/weights/best.pt:/app/artifacts/training/yolo26n-aerial-sheep-v1/weights/best.pt:ro
       - ./artifacts/demo_predictions:/app/artifacts/demo_predictions:ro
       - ./data/demo:/app/data/demo:ro
-      - ./12831053_1080_1920_60fps.mp4:/app/12831053_1080_1920_60fps.mp4:ro
-      - ./7438342-uhd_4096_1974_30fps.mp4:/app/7438342-uhd_4096_1974_30fps.mp4:ro
+      - ./misc/videos/12831053_1080_1920_60fps.mp4:/app/misc/videos/12831053_1080_1920_60fps.mp4:ro
+      - ./misc/videos/7438342-uhd_4096_1974_30fps.mp4:/app/misc/videos/7438342-uhd_4096_1974_30fps.mp4:ro
       - agrovision_uploads:/app/artifacts/uploads
     ports:
       - "127.0.0.1:8000:8000"
