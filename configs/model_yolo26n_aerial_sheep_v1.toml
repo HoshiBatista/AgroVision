@@ -1,0 +1,32 @@
+[model]
+name = "YOLO26n aerial sheep detector"
+version = "yolo26n-aerial-sheep-v1-best-e10"
+architecture = "yolo26n"
+task = "detection"
+target_class = "sheep"
+weights_path = "artifacts/training/yolo26n-aerial-sheep-v1/weights/best.pt"
+weights_sha256 = "29561fa0c96052b9efac892a1dd4a6418508992f4c882b661d08afe5ba124e0d"
+weights_bytes = 20740677
+image_size = 640
+inference_floor = 0.25
+uncertainty_threshold = 0.40
+best_epoch = 10
+
+[evaluation]
+split = "roboflow-test-with-known-temporal-leakage"
+precision = 0.9582019108
+recall = 0.9341424237
+map50 = 0.9626540231
+map50_95 = 0.5680195121
+count_mae = 6.2758620690
+count_rmse = 11.3901550553
+cpu_latency_p50_ms = 31.8837505001
+cpu_latency_p95_ms = 35.4538329993
+
+[provenance]
+dataset = "Roboflow riis/aerial-sheep version 1"
+dataset_license = "Public Domain"
+checkpoint = "yolo26n.pt"
+training_device = "mps"
+seed = 42
+limitation = "Adjacent frames from the same DJI videos cross train/validation/test splits."

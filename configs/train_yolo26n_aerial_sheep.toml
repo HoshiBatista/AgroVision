@@ -1,0 +1,17 @@
+[dataset]
+raw_root = "data/raw/aerial-sheep-1"
+root = "data/processed/aerial-sheep-1-yolo"
+
+[model]
+checkpoint = "yolo26n.pt"
+image_size = 640
+
+[training]
+epochs = 50
+batch_size = 16
+workers = 0
+seed = 42
+device = "auto"
+patience = 15
+output_root = "artifacts/training"
+run_name = "yolo26n-aerial-sheep-v1"

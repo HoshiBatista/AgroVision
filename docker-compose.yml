@@ -1,0 +1,73 @@
+# Local end-to-end AgroVision stack. Secrets are read from the ignored .env file.
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-agrovision}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-agrovision}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - agrovision_pgdata_secure:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-agrovision} -d ${POSTGRES_DB:-agrovision}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: production
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-agrovision}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-agrovision}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
+      CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-http://localhost:8080}
+      MODEL_DEVICE: cpu
+      DETECTOR_MODEL_PATH: /app/artifacts/training/yolo26n-aerial-sheep-v1/weights/best.pt
+      DETECTOR_MODEL_VERSION: yolo26n-aerial-sheep-v1-best-e10
+      DETECTOR_MODEL_SHA256: 29561fa0c96052b9efac892a1dd4a6418508992f4c882b661d08afe5ba124e0d
+      DETECTOR_ALLOW_FALLBACK: "false"
+      STORAGE_ROOT: /app/artifacts/uploads
+      DEMO_ARTIFACTS_ROOT: /app/artifacts/demo_predictions
+      STREAMS_CONFIG_PATH: /app/configs/app.toml
+    volumes:
+      - ./artifacts/training/yolo26n-aerial-sheep-v1/weights/best.pt:/app/artifacts/training/yolo26n-aerial-sheep-v1/weights/best.pt:ro
+      - ./artifacts/demo_predictions:/app/artifacts/demo_predictions:ro
+      - ./data/demo:/app/data/demo:ro
+      - ./12831053_1080_1920_60fps.mp4:/app/12831053_1080_1920_60fps.mp4:ro
+      - ./7438342-uhd_4096_1974_30fps.mp4:/app/7438342-uhd_4096_1974_30fps.mp4:ro
+      - agrovision_uploads:/app/artifacts/uploads
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/ready', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      retries: 12
+      start_period: 30s
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+      args:
+        VITE_API_URL: /api
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+volumes:
+  agrovision_pgdata_secure:
+  agrovision_uploads:

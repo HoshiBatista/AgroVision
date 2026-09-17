@@ -1,0 +1,15 @@
+# Local drone videos shown on the main dashboard. Missing files are skipped.
+
+[[streams]]
+id = "drone-close-flight"
+name = "Дрон · ближний облёт"
+location = "Вертикальная съёмка · 1080×1920"
+uri = "12831053_1080_1920_60fps.mp4"
+kind = "file"
+
+[[streams]]
+id = "drone-wide-flight"
+name = "Дрон · панорамный облёт"
+location = "Широкая аэросъёмка · 4096×1974"
+uri = "7438342-uhd_4096_1974_30fps.mp4"
+kind = "file"
